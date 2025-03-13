@@ -34,7 +34,17 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
   };
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="space-y-4 bg-gray-100 p-6 rounded-lg shadow-lg">
+      <div className="md:grid grid-cols-4 gap-4 items-center border-b-2 pb-2 hidden">
+        <h2 className="text-lg font-semibold text-gray-700 col-span-1">City</h2>
+        <h2 className="text-lg font-semibold text-gray-700 col-span-1">Date</h2>
+        <h2 className="text-lg font-semibold text-gray-700 col-span-1">
+          Temperature
+        </h2>
+        <h2 className="text-lg font-semibold text-gray-700 col-span-1">
+          Actions
+        </h2>
+      </div>
       {localReports.map((report) => (
         <WeatherReportItem
           key={report.id}

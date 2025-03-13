@@ -8,16 +8,27 @@ import { Button } from "@/components/ui/Button";
 export const WeatherReportsContainer = () => {
   const { reports, loading, error } = getWeatherReports();
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-gray-700">
+        Loading...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-red-500">
+        Error: {error}
+      </div>
+    );
 
   return (
-    <div className="container mx-auto my-4">
-      <h1 className="text-2xl">Weather Reports</h1>
-      <Link href="/new">
-        <Button variant="primary">New Report</Button>
-      </Link>
-
+    <div className="container mx-auto my-8 p-6 w-4/5 bg-white shadow-lg rounded-xl">
+      <div className="flex justify-between items-center mb-6 ">
+        <h1 className="text-3xl font-bold text-gray-800">Weather Reports</h1>
+        <Link href="/new">
+          <Button variant="primary">New Report</Button>
+        </Link>
+      </div>
       <WeatherReportList reports={reports} />
     </div>
   );
