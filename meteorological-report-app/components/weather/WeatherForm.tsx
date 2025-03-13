@@ -22,7 +22,6 @@ const reportsApi = new ReportsApi();
 
 export default function WeatherForm({ report }: WeatherFormProps) {
   const router = useRouter();
-
   const isEditMode = Boolean(report);
 
   const {
@@ -30,7 +29,6 @@ export default function WeatherForm({ report }: WeatherFormProps) {
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
     reset,
-    watch,
     setError,
   } = useForm<WeatherFormValues>({
     resolver: zodResolver(WeatherReportSchema),
@@ -44,12 +42,8 @@ export default function WeatherForm({ report }: WeatherFormProps) {
   });
 
   useEffect(() => {
-    if (report) {
-      reset(report);
-    }
+    if (report) reset(report);
   }, [report]);
-
-  console.log(watch());
 
   const onSubmit: SubmitHandler<WeatherFormValues> = async (data) => {
     if (data.unit === "C" && data.temperature < -273.15) {
@@ -58,18 +52,14 @@ export default function WeatherForm({ report }: WeatherFormProps) {
       });
       return;
     }
-
     if (data.unit === "F" && data.temperature < -459.67) {
       setError("temperature", {
         message: "Temperature cannot be below -459.67°F.",
       });
       return;
     }
-
     if (data.unit === "K" && data.temperature < 0) {
-      setError("temperature", {
-        message: "Temperature cannot be below 0K.",
-      });
+      setError("temperature", { message: "Temperature cannot be below 0K." });
       return;
     }
 
@@ -79,7 +69,6 @@ export default function WeatherForm({ report }: WeatherFormProps) {
       } else {
         await reportsApi.create(data);
       }
-
       router.push("/");
     } catch (err) {
       console.error(err);
@@ -87,44 +76,70 @@ export default function WeatherForm({ report }: WeatherFormProps) {
   };
 
   return (
-    <div className="p-4 border rounded">
-      <h2 className="text-xl font-bold mb-4">
+    <div className="max-w-lg mx-auto bg-white shadow-lg rounded-xl border border-gray-200 p-6 mt-6">
+      <h2 className="text-lg md:text-2xl font-semibold text-gray-700 mb-4">
         {isEditMode ? "Edit Weather Report" : "Add Weather Report"}
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Input label="City" type="text" {...register("city")} />
-        {errors.city && (
-          <p className="text-red-500 text-sm">{errors.city.message}</p>
-        )}
+        <div>
+          <Input
+            label="City"
+            type="text"
+            {...register("city")}
+            className="w-full"
+          />
+          {errors.city && (
+            <p className="text-red-500 text-sm mt-1">{errors.city.message}</p>
+          )}
+        </div>
 
-        <Input
-          label="Temperature"
-          type="number"
-          {...register("temperature", { valueAsNumber: true })}
-        />
-        {errors.temperature && (
-          <p className="text-red-500">{errors.temperature.message}</p>
-        )}
+        <div>
+          <Input
+            label="Temperature"
+            type="number"
+            {...register("temperature", { valueAsNumber: true })}
+            className="w-full"
+          />
+          {errors.temperature && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.temperature.message}
+            </p>
+          )}
+        </div>
 
-        <Select
-          label="Unit"
-          {...register("unit")}
-          options={[
-            { value: "C", label: "Celsius (°C)" },
-            { value: "F", label: "Fahrenheit (°F)" },
-            { value: "K", label: "Kelvin (K)" },
-          ]}
-        />
-        {errors.unit && <p className="text-red-500">{errors.unit.message}</p>}
+        <div>
+          <Select
+            label="Unit"
+            {...register("unit")}
+            options={[
+              { value: "C", label: "Celsius (°C)" },
+              { value: "F", label: "Fahrenheit (°F)" },
+              { value: "K", label: "Kelvin (K)" },
+            ]}
+            className="w-full"
+          />
+          {errors.unit && (
+            <p className="text-red-500 text-sm mt-1">{errors.unit.message}</p>
+          )}
+        </div>
 
-        <Input label="Date" type="date" {...register("date")} />
-        {errors.date && <p className="text-red-500">{errors.date.message}</p>}
+        <div>
+          <Input
+            label="Date"
+            type="date"
+            {...register("date")}
+            className="w-full"
+          />
+          {errors.date && (
+            <p className="text-red-500 text-sm mt-1">{errors.date.message}</p>
+          )}
+        </div>
 
         <Button
           type="submit"
           variant="primary"
-          className="p-2 bg-blue-500 text-white rounded"
+          className="w-full py-3 text-lg"
           disabled={!isValid || isSubmitting}
         >
           {isSubmitting

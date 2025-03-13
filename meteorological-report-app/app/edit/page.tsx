@@ -40,8 +40,7 @@ export default function WeatherEditPage() {
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <div>
-      <h1>Edit Weather Report</h1>
+    <div className="p-6 max-w-lg mx-auto">
       {report && <WeatherForm report={report} />}
     </div>
   );

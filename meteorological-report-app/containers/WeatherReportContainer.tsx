@@ -22,7 +22,7 @@ export const WeatherReportsContainer = () => {
     );
 
   return (
-    <div className="container mx-auto my-8 p-6 w-4/5 bg-white shadow-lg rounded-xl">
+    <div className="container mx-auto my-8 p-6 w-4/5 bg-white  rounded-xl">
       <div className="flex justify-between items-center mb-6 ">
         <h1 className="text-3xl font-bold text-gray-800">Weather Reports</h1>
         <Link href="/new">

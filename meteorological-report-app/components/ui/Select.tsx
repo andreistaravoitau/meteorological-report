@@ -12,9 +12,14 @@ export const Select = ({
   ...props
 }: SelectProps) => {
   return (
-    <div>
-      <label className="block text-sm font-medium">{label}</label>
-      <select className={`w-full p-2 border rounded ${className}`} {...props}>
+    <div className="w-full">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        {label}
+      </label>
+      <select
+        className={`w-full p-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 ${className}`}
+        {...props}
+      >
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}

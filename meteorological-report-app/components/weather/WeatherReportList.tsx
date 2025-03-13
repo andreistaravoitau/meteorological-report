@@ -77,7 +77,7 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
     : localReports;
 
   return (
-    <div className="space-y-4 bg-gray-100 p-6 rounded-lg shadow-lg">
+    <div className="space-y-4 bg-gray-100 p-6 rounded-lg">
       <div className="flex items-center gap-4 mb-4">
         <label className="text-lg font-semibold text-gray-700">
           Filter by City:
