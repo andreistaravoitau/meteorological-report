@@ -34,7 +34,7 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
   };
 
   return (
-    <ul>
+    <div className="flex flex-col space-y-4">
       {localReports.map((report) => (
         <WeatherReportItem
           key={report.id}
@@ -42,6 +42,6 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
           onDelete={() => handleDelete(report.id)}
         />
       ))}
-    </ul>
+    </div>
   );
 };

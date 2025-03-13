@@ -3,15 +3,16 @@ import Image from "next/image";
 
 const Header = () => {
   return (
-    <div>
+    <div className="bg-neutral-800 p-4">
       <nav>
-        <Link href="/">
+        <Link href="/" className="flex items-center">
           <Image
             src="logo.svg"
             alt="Meteorological Report App"
-            width={40}
-            height={40}
+            width={64}
+            height={64}
           ></Image>
+          <h1 className="text-2xl font-sans ">Home</h1>
         </Link>
       </nav>
     </div>
