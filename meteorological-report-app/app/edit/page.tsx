@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ReportsApi } from "@/api/reports";
 import { WeatherReport } from "@/types/weatherReport";
@@ -40,10 +40,8 @@ export default function WeatherEditPage() {
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="p-6 max-w-lg mx-auto">
-        {report && <WeatherForm report={report} />}
-      </div>
-    </Suspense>
+    <div className="p-6 max-w-lg mx-auto">
+      {report && <WeatherForm report={report} />}
+    </div>
   );
 }
