@@ -40,9 +40,9 @@ export default function WeatherEditPage() {
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <main>
+    <div>
       <h1>Edit Weather Report</h1>
       {report && <WeatherForm report={report} />}
-    </main>
+    </div>
   );
 }
