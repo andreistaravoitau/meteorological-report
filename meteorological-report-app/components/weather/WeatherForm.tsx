@@ -2,10 +2,17 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { createWeatherForm } from "@/hooks/createWeatherReport";
 import { Button } from "../ui/Button";
+import { WeatherReport } from "@/types/weatherReport";
+import { updateWeatherReport } from "@/hooks/updateWeatherReport";
 
-export default function WeatherForm() {
+interface WeatherFormProps {
+  report?: WeatherReport | null;
+}
+
+export default function WeatherForm({ report }: WeatherFormProps) {
+  const isEditMode = Boolean(report);
   const { formData, handleChange, handleSubmit, loading, error, success } =
-    createWeatherForm();
+    isEditMode ? updateWeatherReport(report!) : createWeatherForm();
 
   return (
     <div className="p-4 border rounded">
@@ -56,7 +63,7 @@ export default function WeatherForm() {
           className="p-2 bg-blue-500 text-white rounded"
           disabled={loading}
         >
-          {loading ? "Submitting..." : "Submit"}
+          {loading ? "Submitting..." : isEditMode ? "Update Report" : "Submit"}
         </Button>
       </form>
     </div>

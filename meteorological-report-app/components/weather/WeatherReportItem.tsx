@@ -1,6 +1,7 @@
 import { WeatherReport } from "@/types/weatherReport";
 import { toKelvin } from "@/utils/toKelvin";
 import { Button } from "../ui/Button";
+import Link from "next/link";
 
 interface WeatherReportItemProps {
   report: WeatherReport;
@@ -24,6 +25,9 @@ export const WeatherReportItem = ({
       <div>
         <p>Date: {report.date}</p>
       </div>
+      <Link href={`/reports/edit?id=${report.id}`}>
+        <Button variant="secondary">Edit</Button>
+      </Link>
       <Button variant="danger" onClick={onDelete}>
         Delete
       </Button>

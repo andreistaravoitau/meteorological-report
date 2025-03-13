@@ -1,11 +1,12 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { ReportsApi } from "@/api/reports";
 import { useRouter } from "next/navigation";
+import { WeatherReport } from "@/types/weatherReport";
 import { validateWeatherReport } from "@/utils/validateWeatherReport";
 
 const reportsApi = new ReportsApi();
 
-export const createWeatherForm = () => {
+export const updateWeatherReport = (report: WeatherReport | null) => {
   const [formData, setFormData] = useState({
     city: "",
     temperature: "",
@@ -17,6 +18,17 @@ export const createWeatherForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (report) {
+      setFormData({
+        city: report.city,
+        temperature: String(report.temperature),
+        unit: report.unit,
+        date: report.date,
+      });
+    }
+  }, [report]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -44,18 +56,19 @@ export const createWeatherForm = () => {
     }
 
     try {
-      await reportsApi.create({
-        city: formData.city,
-        temperature: temperature,
-        unit: formData.unit as "C" | "F" | "K",
-        date: formData.date,
-      });
+      if (report) {
+        await reportsApi.update(report.id, {
+          city: formData.city,
+          temperature: Number(formData.temperature),
+          unit: formData.unit as "C" | "F" | "K",
+          date: formData.date,
+        });
 
-      setSuccess("Report successfully added!");
+        setSuccess("Report successfully updated!");
+      }
       router.push("/");
-      setFormData({ city: "", temperature: "", unit: "C", date: "" });
     } catch (err) {
-      setError("Failed to submit the report.");
+      setError("Failed to update the report.");
     } finally {
       setLoading(false);
     }
