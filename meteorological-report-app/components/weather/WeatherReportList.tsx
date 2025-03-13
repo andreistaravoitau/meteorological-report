@@ -1,10 +1,9 @@
 import { WeatherReport } from "@/types/weatherReport";
 import { WeatherReportItem } from "./WeatherReportItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { deleteWeatherReport } from "@/hooks/deleteWeatherReport";
 import { ReportsApi } from "@/api/reports";
 import { toKelvin } from "@/utils/toKelvin";
-import { getNextSortDirection, sortReports } from "@/utils/sorting";
 
 const reportsApi = new ReportsApi();
 
@@ -18,10 +17,7 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof WeatherReport | "temperature" | null;
     direction: "asc" | "desc" | null;
-  }>({
-    key: null,
-    direction: null,
-  });
+  } | null>(null);
 
   const fetchReports = async () => {
     try {
@@ -39,19 +35,38 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
   };
 
   const handleSort = (key: keyof WeatherReport | "temperature") => {
-    const direction = getNextSortDirection(
-      sortConfig.key,
-      sortConfig.direction,
-      key
-    );
+    let direction: "asc" | "desc" | null = "asc";
+    if (sortConfig?.key === key) {
+      if (sortConfig.direction === "asc") {
+        direction = "desc";
+      } else if (sortConfig.direction === "desc") {
+        direction = null;
+      }
+    }
     setSortConfig({ key: direction ? key : null, direction });
 
     if (!direction) {
-      fetchReports();
+      setLocalReports(reports);
       return;
     }
 
-    setLocalReports(sortReports(localReports, key, direction));
+    const sortedReports = [...localReports].sort((a, b) => {
+      let valueA: any = a[key];
+      let valueB: any = b[key];
+
+      if (key === "temperature") {
+        valueA = toKelvin(a.temperature, a.unit);
+        valueB = toKelvin(b.temperature, b.unit);
+      } else if (typeof valueA === "string" && typeof valueB === "string") {
+        valueA = valueA.toLowerCase();
+        valueB = valueB.toLowerCase();
+      }
+
+      if (valueA < valueB) return direction === "asc" ? -1 : 1;
+      if (valueA > valueB) return direction === "asc" ? 1 : -1;
+      return 0;
+    });
+    setLocalReports(sortedReports);
   };
 
   return (
