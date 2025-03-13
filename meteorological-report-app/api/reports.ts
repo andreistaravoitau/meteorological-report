@@ -1,4 +1,4 @@
-import { WeatherReport } from "@/types/wetherReport";
+import { WeatherReport } from "@/types/weatherReport";
 
 const API_ENDPOINT = "http://localhost:8000/api/reports";
 
@@ -51,9 +51,15 @@ export class ReportsApi {
     });
   }
 
-  async delete(id: string): Promise<{ message: string }> {
-    return this.request<{ message: string }>(`/${id}`, {
+  async delete(id: string): Promise<void> {
+    const res = await fetch(`${this.baseUrl}/${id}`, {
       method: "DELETE",
+      headers: { "Content-Type": "application/json" },
     });
+
+    if (!res.ok) {
+      const errorMsg = await res.text();
+      throw new Error(`API Error (${res.status}): ${errorMsg}`);
+    }
   }
 }

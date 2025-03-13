@@ -1,4 +1,4 @@
-import { WeatherReport } from "@/types/wetherReport";
+import { WeatherReport } from "@/types/weatherReport";
 import { toKelvin } from "@/utils/toKelvin";
 import { Button } from "../ui/Button";
 

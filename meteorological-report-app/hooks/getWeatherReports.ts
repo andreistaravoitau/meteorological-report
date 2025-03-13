@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ReportsApi } from "@/api/reports";
-import { WeatherReport } from "@/types/wetherReport";
+import { WeatherReport } from "@/types/weatherReport";
 
 const reportsApi = new ReportsApi();
 
@@ -16,5 +16,6 @@ export const getWeatherReports = () => {
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
+
   return { reports, loading, error };
 };
