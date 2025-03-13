@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { createWeatherForm } from "@/hooks/createWeatherReport";
+import { Button } from "../ui/Button";
 
 export default function WeatherForm() {
   const { formData, handleChange, handleSubmit, loading, error, success } =
@@ -49,13 +50,14 @@ export default function WeatherForm() {
           required
         />
 
-        <button
+        <Button
           type="submit"
+          variant="primary"
           className="p-2 bg-blue-500 text-white rounded"
           disabled={loading}
         >
           {loading ? "Submitting..." : "Submit"}
-        </button>
+        </Button>
       </form>
     </div>
   );

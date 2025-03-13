@@ -17,6 +17,22 @@ export const createWeatherForm = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
 
+  const validateTemperature = (temp: number, unit: string) => {
+    if (unit === "C" && temp < -273.15)
+      return "Temperature cannot be below -273.15°C.";
+    if (unit === "F" && temp < -459.67)
+      return "Temperature cannot be below -459.67°F.";
+    if (unit === "K" && temp < 0) return "Temperature cannot be below 0K.";
+    return null;
+  };
+
+  const validateDate = (date: string) => {
+    const selectedDate = new Date(date);
+    const today = new Date();
+    if (selectedDate > today) return "Date cannot be in the future.";
+    return null;
+  };
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -29,10 +45,26 @@ export const createWeatherForm = () => {
     setError(null);
     setSuccess(null);
 
+    const temperature = Number(formData.temperature);
+
+    const temperatureError = validateTemperature(temperature, formData.unit);
+    if (temperatureError) {
+      setError(temperatureError);
+      setLoading(false);
+      return;
+    }
+
+    const dateError = validateDate(formData.date);
+    if (dateError) {
+      setError(dateError);
+      setLoading(false);
+      return;
+    }
+
     try {
       await reportsApi.create({
         city: formData.city,
-        temperature: Number(formData.temperature),
+        temperature: temperature,
         unit: formData.unit as "C" | "F" | "K",
         date: formData.date,
       });
