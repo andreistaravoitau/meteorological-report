@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { ReportsApi } from "@/api/reports";
+import { useRouter } from "next/navigation";
 
 const reportsApi = new ReportsApi();
 
@@ -14,6 +15,7 @@ export const createWeatherForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -36,6 +38,7 @@ export const createWeatherForm = () => {
       });
 
       setSuccess("Report successfully added!");
+      router.push("/");
       setFormData({ city: "", temperature: "", unit: "C", date: "" });
     } catch (err) {
       setError("Failed to submit the report.");
