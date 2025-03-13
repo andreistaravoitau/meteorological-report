@@ -16,6 +16,6 @@ export const getWeatherReports = () => {
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
-
+  console.log(reports);
   return { reports, loading, error };
 };

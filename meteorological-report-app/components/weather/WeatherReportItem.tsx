@@ -1,11 +1,16 @@
 import { WeatherReport } from "@/types/wetherReport";
 import { toKelvin } from "@/utils/toKelvin";
+import { Button } from "../ui/Button";
 
 interface WeatherReportItemProps {
   report: WeatherReport;
+  onDelete: () => void;
 }
 
-export const WeatherReportItem = ({ report }: WeatherReportItemProps) => {
+export const WeatherReportItem = ({
+  report,
+  onDelete,
+}: WeatherReportItemProps) => {
   return (
     <li>
       <div>
@@ -19,6 +24,9 @@ export const WeatherReportItem = ({ report }: WeatherReportItemProps) => {
       <div>
         <p>Date: {report.date}</p>
       </div>
+      <Button variant="danger" onClick={onDelete}>
+        Delete
+      </Button>
     </li>
   );
 };
