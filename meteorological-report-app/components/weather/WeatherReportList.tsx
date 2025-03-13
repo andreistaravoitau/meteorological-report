@@ -1,8 +1,10 @@
 import { WeatherReport } from "@/types/weatherReport";
 import { WeatherReportItem } from "./WeatherReportItem";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { deleteWeatherReport } from "@/hooks/deleteWeatherReport";
 import { ReportsApi } from "@/api/reports";
+import { toKelvin } from "@/utils/toKelvin";
+import { getNextSortDirection, sortReports } from "@/utils/sorting";
 
 const reportsApi = new ReportsApi();
 
@@ -12,7 +14,14 @@ interface WeatherReportListProps {
 
 export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
   const [localReports, setLocalReports] = useState<WeatherReport[]>(reports);
-  const { deleteReport, loading, error } = deleteWeatherReport();
+  const { deleteReport } = deleteWeatherReport();
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof WeatherReport | "temperature" | null;
+    direction: "asc" | "desc" | null;
+  }>({
+    key: null,
+    direction: null,
+  });
 
   const fetchReports = async () => {
     try {
@@ -23,24 +32,63 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
     }
   };
 
-  useEffect(() => {
-    fetchReports();
-  }, []);
-
   const handleDelete = (id: string) => {
     deleteReport(id, () => {
       fetchReports();
     });
   };
 
+  const handleSort = (key: keyof WeatherReport | "temperature") => {
+    const direction = getNextSortDirection(
+      sortConfig.key,
+      sortConfig.direction,
+      key
+    );
+    setSortConfig({ key: direction ? key : null, direction });
+
+    if (!direction) {
+      fetchReports();
+      return;
+    }
+
+    setLocalReports(sortReports(localReports, key, direction));
+  };
+
   return (
     <div className="space-y-4 bg-gray-100 p-6 rounded-lg shadow-lg">
       <div className="md:grid grid-cols-4 gap-4 items-center border-b-2 pb-2 hidden">
-        <h2 className="text-lg font-semibold text-gray-700 col-span-1">City</h2>
-        <h2 className="text-lg font-semibold text-gray-700 col-span-1">Date</h2>
-        <h2 className="text-lg font-semibold text-gray-700 col-span-1">
-          Temperature
-        </h2>
+        <button onClick={() => handleSort("city")}>
+          <h2 className="text-lg font-semibold text-gray-700 col-span-1">
+            City
+            {sortConfig?.key === "city"
+              ? sortConfig.direction === "asc"
+                ? "▲"
+                : "▼"
+              : "↑↓"}
+          </h2>
+        </button>
+        <button
+          className="text-lg font-semibold text-gray-700 col-span-1"
+          onClick={() => handleSort("date")}
+        >
+          Date{" "}
+          {sortConfig?.key === "date"
+            ? sortConfig.direction === "asc"
+              ? "▲"
+              : "▼"
+            : "↑↓"}
+        </button>
+        <button
+          className="text-lg font-semibold text-gray-700 col-span-1"
+          onClick={() => handleSort("temperature")}
+        >
+          Temperature{" "}
+          {sortConfig?.key === "temperature"
+            ? sortConfig.direction === "asc"
+              ? "▲"
+              : "▼"
+            : "↑↓"}
+        </button>
         <h2 className="text-lg font-semibold text-gray-700 col-span-1">
           Actions
         </h2>
