@@ -18,6 +18,7 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
     key: keyof WeatherReport | "temperature" | null;
     direction: "asc" | "desc" | null;
   } | null>(null);
+  const [selectedCity, setSelectedCity] = useState<string>("");
 
   const fetchReports = async () => {
     try {
@@ -69,8 +70,26 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
     setLocalReports(sortedReports);
   };
 
+  const filteredReports = selectedCity
+    ? localReports.filter((report) =>
+        report.city.toLowerCase().includes(selectedCity.toLowerCase())
+      )
+    : localReports;
+
   return (
     <div className="space-y-4 bg-gray-100 p-6 rounded-lg shadow-lg">
+      <div className="flex items-center gap-4 mb-4">
+        <label className="text-lg font-semibold text-gray-700">
+          Filter by City:
+        </label>
+        <input
+          type="text"
+          placeholder="Enter city name"
+          value={selectedCity}
+          onChange={(e) => setSelectedCity(e.target.value)}
+          className="p-2 border rounded-lg shadow-sm focus:ring text-gray-700"
+        />
+      </div>
       <div className="md:grid grid-cols-4 gap-4 items-center border-b-2 pb-2 hidden">
         <button onClick={() => handleSort("city")}>
           <h2 className="text-lg font-semibold text-gray-700 col-span-1">
@@ -108,7 +127,7 @@ export const WeatherReportList = ({ reports = [] }: WeatherReportListProps) => {
           Actions
         </h2>
       </div>
-      {localReports.map((report) => (
+      {filteredReports.map((report) => (
         <WeatherReportItem
           key={report.id}
           report={report}
