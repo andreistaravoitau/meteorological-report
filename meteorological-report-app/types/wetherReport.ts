@@ -1,4 +1,4 @@
-interface WeatherReport {
+export interface WeatherReport {
   id: string;
   temperature: number;
   unit: TemperatureUnit;
@@ -6,4 +6,4 @@ interface WeatherReport {
   date: string;
 }
 
-type TemperatureUnit = "C" | "K" | "F";
+export type TemperatureUnit = "C" | "K" | "F";
