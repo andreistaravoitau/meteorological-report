@@ -1,12 +1,12 @@
 "use client";
 
-import { getWeatherReports } from "@/hooks/getWeatherReports";
+import { useGetWeatherReports } from "@/hooks/useGetWeatherReports";
 import { WeatherReportList } from "@/components/weather/WeatherReportList";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 export const WeatherReportsContainer = () => {
-  const { reports, loading, error } = getWeatherReports();
+  const { reports, loading, error } = useGetWeatherReports();
 
   if (loading)
     return (

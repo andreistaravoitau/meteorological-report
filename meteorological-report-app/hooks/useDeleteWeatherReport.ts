@@ -3,7 +3,7 @@ import { ReportsApi } from "@/api/reports";
 
 const reportsApi = new ReportsApi();
 
-export const deleteWeatherReport = () => {
+export const useDeleteWeatherReport = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

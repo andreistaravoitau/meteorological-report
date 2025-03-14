@@ -4,7 +4,7 @@ import { WeatherReport } from "@/types/weatherReport";
 
 const reportsApi = new ReportsApi();
 
-export const getWeatherReports = () => {
+export const useGetWeatherReports = () => {
   const [reports, setReports] = useState<WeatherReport[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
